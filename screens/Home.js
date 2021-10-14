@@ -6,11 +6,14 @@ import {
   SafeAreaView,
   StatusBar,
   TouchableOpacity,
+  Image,
+  ScrollView,
 } from "react-native";
 import { Avatar } from "react-native-elements";
 import { FontAwesome } from "react-native-vector-icons";
 import { Dimensions } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { transaction } from "../data/transactionData";
 
 const Home = () => {
   return (
@@ -29,37 +32,86 @@ const Home = () => {
           <FontAwesome name="bell" size={30} color="#000" />
         </View>
       </View>
+      <Text style={{ fontSize: 25 }}>Welcome Tony Bradley!</Text>
       <View style={styles.moneyContainer}>
         <View style={styles.amountContainer}>
           <Text
             style={{
               color: "gray",
-              bottom: 20,
-              fontSize: 18,
+              fontSize: 15,
               fontWeight: "bold",
-                          bottom: 30,
-              right:30
+              bottom: 50,
             }}
           >
             You Orramo Balance
           </Text>
-          <Text
-            style={{
-              color: "#3B3D99",
-              opacity: 0.5,
-              fontWeight: "bold",
-              fontSize: 20,
-            }}
-          >
-            439.25 USD
-          </Text>
-          <Text style={styles.amount}>250,000 XAF</Text>
+          <View style={{ flexDirection: "row", justifyContent: "flex-start" }}>
+            <Text style={styles.amount}>XAF 250,000</Text>
+            <View style={{ flexDirection: "column" }}>
+              <Text
+                style={{
+                  top: 5,
+                  color: "#3B3D99",
+                  opacity: 0.5,
+                  fontWeight: "bold",
+                  fontSize: 15,
+                  paddingLeft: 60,
+                }}
+              >
+                $ 439.25
+              </Text>
+              <Text
+                style={{
+                  top: 5,
+                  color: "grey",
+                  opacity: 1.0,
+                  fontWeight: "bold",
+                                  fontSize: 12,
+                  left: 30
+                }}
+              >
+                1 USD = 650 XAF
+              </Text>
+            </View>
+          </View>
         </View>
       </View>
       <View style={styles.buttons}>
         <TouchableOpacity style={styles.button}>
-          <Ionicons name="add" size={50} color="#fff" />
+          <Ionicons name="add" size={40} color="#fff" />
         </TouchableOpacity>
+      </View>
+      <View style={styles.recent}>
+        <Text style={styles.activity}>Transaction History</Text>
+
+        <ScrollView style={{ marginTop: 10 }}>
+          {transaction.map((data, index) => (
+            <View key={index} style={styles.history}>
+              <Avatar
+                rounded
+                size="small"
+                source={{
+                  uri: data.image,
+                }}
+              />
+              <View style={{ flexDirection: "column" }}>
+                <Text
+                  style={{ color: "#14213D", fontSize: 15, paddingLeft: 20 }}
+                >
+                  {data.name}
+                </Text>
+                <Text style={{ color: "gray", fontSize: 12, paddingLeft: 20 }}>
+                  {data.date}
+                </Text>
+              </View>
+              <Text
+                style={{ color: "#14213D", fontSize: 15, paddingLeft: 120 }}
+              >
+                XAF {data.amount}
+              </Text>
+            </View>
+          ))}
+        </ScrollView>
       </View>
     </SafeAreaView>
   );
@@ -76,7 +128,9 @@ const styles = StyleSheet.create({
   },
   amountContainer: {
     backgroundColor: "#fff",
-    padding: 50,
+    padding: 35,
+    paddingTop: 70,
+    borderRadius: 15,
   },
   header: {
     flexDirection: "row",
@@ -87,10 +141,14 @@ const styles = StyleSheet.create({
   divider: {
     paddingLeft: Dimensions.get("window").width - 130,
   },
+  activity: {
+    paddingRight: Dimensions.get("window").width - 150,
+    color: "gray",
+  },
   amount: {
     color: "#3B3D99",
     fontWeight: "bold",
-    fontSize: 40,
+    fontSize: 30,
   },
   moneyContainer: {
     flex: 1,
@@ -106,9 +164,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#fca311",
     padding: 12,
-    width: 80,
-    height: 80,
+    width: 70,
+    height: 70,
     borderRadius: 40,
     marginBottom: 20,
+    zIndex: 999,
+  },
+  recent: {
+    flex: 2,
+  },
+  history: {
+    backgroundColor: "#fff",
+    padding: 10,
+    flexDirection: "row",
+    marginTop: 10,
+    borderRadius: 15,
   },
 });
