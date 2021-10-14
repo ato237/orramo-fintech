@@ -10,6 +10,7 @@ import {
 const StarterScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
+
       <StatusBar backgroundColor="#3B3D99" barStyle="light-content" />
 
       <View style={styles.logo}>

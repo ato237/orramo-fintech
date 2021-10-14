@@ -66,8 +66,8 @@ const Home = () => {
                   color: "grey",
                   opacity: 1.0,
                   fontWeight: "bold",
-                                  fontSize: 12,
-                  left: 30
+                  fontSize: 12,
+                  left: 30,
                 }}
               >
                 1 USD = 650 XAF
@@ -76,9 +76,10 @@ const Home = () => {
           </View>
         </View>
       </View>
-      <View style={styles.buttons}>
-        <TouchableOpacity style={styles.button}>
-          <Ionicons name="add" size={40} color="#fff" />
+          <View style={styles.buttons}>
+  
+        <TouchableOpacity style={[styles.button, { zIndex: 999 }]}>
+                  <Ionicons name="add" size={40} color="#fff"/>
         </TouchableOpacity>
       </View>
       <View style={styles.recent}>
@@ -105,7 +106,7 @@ const Home = () => {
                 </Text>
               </View>
               <Text
-                style={{ color: "#14213D", fontSize: 15, paddingLeft: 120 }}
+                style={{ color: "#14213D", fontSize: 15, marginLeft: 100,left:25 }}
               >
                 XAF {data.amount}
               </Text>
@@ -119,6 +120,7 @@ const Home = () => {
 
 export default Home;
 
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#F1F1FB",
@@ -128,7 +130,7 @@ const styles = StyleSheet.create({
   },
   amountContainer: {
     backgroundColor: "#fff",
-    padding: 35,
+    padding: 20,
     paddingTop: 70,
     borderRadius: 15,
   },
@@ -142,7 +144,7 @@ const styles = StyleSheet.create({
     paddingLeft: Dimensions.get("window").width - 130,
   },
   activity: {
-    paddingRight: Dimensions.get("window").width - 150,
+    paddingRight: Dimensions.get("window").width - 180,
     color: "gray",
   },
   amount: {
@@ -157,7 +159,9 @@ const styles = StyleSheet.create({
   buttons: {
     left: Dimensions.get("window").width - 100,
     top: Dimensions.get("window").height - 150,
-    position: "absolute",
+      position: "absolute",
+      zIndex:999,
+
   },
   button: {
     justifyContent: "center",
@@ -167,8 +171,8 @@ const styles = StyleSheet.create({
     width: 70,
     height: 70,
     borderRadius: 40,
-    marginBottom: 20,
-    zIndex: 999,
+      marginBottom: 20,
+
   },
   recent: {
     flex: 2,
@@ -178,6 +182,9 @@ const styles = StyleSheet.create({
     padding: 10,
     flexDirection: "row",
     marginTop: 10,
-    borderRadius: 15,
+      borderRadius: 15,
+      zIndex: -99,
+      elevation: 0,
+
   },
 });
