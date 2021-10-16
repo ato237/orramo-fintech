@@ -9,6 +9,7 @@ import Signup from './screens/Signup';
 import Home from './screens/Home';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MainScreen from './screens/MainScreen';
+import GoogleSign from './screens/GoogleSign';
 
 
 
@@ -18,7 +19,7 @@ export default function App() {
 
   return (
     <NavigationContainer independent = {true}>
-      <Stack.Navigator initialRouteName="StarterScreen">
+      <Stack.Navigator initialRouteName="MainScreen">
       <Stack.Screen
           name="Login"
           component={Login}
@@ -43,6 +44,13 @@ export default function App() {
         <Stack.Screen
           name="MainScreen"
           component={MainScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="GoolgeSign"
+          component={GoogleSign}
           options={{
             headerShown: false,
           }}

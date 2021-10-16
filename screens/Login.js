@@ -16,6 +16,8 @@ import { FontAwesome } from "react-native-vector-icons";
 import { Feather } from "react-native-vector-icons";
 
 const Login = ({ navigation }) => {
+        {/**The Data for the password and the email  */}
+
   const [data, setData] = React.useState({
     email: "",
     password: "",
@@ -56,6 +58,7 @@ const Login = ({ navigation }) => {
   navigation = useNavigation();
   return (
     <>
+      {/**The login View */}
       <View style={styles.container}>
         <StatusBar backgroundColor="#3B3D99" barStyle="light-content" />
 
@@ -97,6 +100,8 @@ const Login = ({ navigation }) => {
               )}
             </TouchableOpacity>
           </View>
+                  {/**Sign Up button */}
+
           <View style={styles.button}>
             <TouchableOpacity
               onPress={() => navigation.navigate("MainScreen")}
@@ -134,6 +139,8 @@ const Login = ({ navigation }) => {
               </Text>
             </TouchableOpacity>
           </View>
+                  {/**Sign in With google button  */}
+
           <View style={styles.buttonG}>
             <Text> Or </Text>
             <TouchableOpacity

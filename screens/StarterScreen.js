@@ -7,21 +7,23 @@ import {
   Text,
   View,
 } from "react-native";
-const StarterScreen = ({navigation}) => {
+const StarterScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-
-      <StatusBar backgroundColor="#3B3D99" barStyle="light-content" />
+      <StatusBar backgroundColor="#14213D" barStyle="light-content" />
 
       <View style={styles.logo}>
         <Text style={styles.text}>ORRAMO</Text>
         <Text style={styles.description}>Your finances in one place!</Text>
       </View>
       <View style={styles.button}>
-        <TouchableOpacity style={styles.buttonCover} onPress={()=> navigation.navigate('Signup')}>
-          <Text style={{ fontSize: 18, color: "#fff" }}>Get Started!</Text>
+        <TouchableOpacity
+          style={styles.buttonCover}
+          onPress={() => navigation.navigate("GoolgeSign")}
+        >
+          <Text style={{ fontSize: 18,fontWeight:'bold', color: "#000" }}>Get Started!</Text>
         </TouchableOpacity>
-        <View style={{flex:1, flexDirection:'row',marginTop:15}}>
+        {/*<View style={{flex:1, flexDirection:'row',marginTop:15}}>
           <Text style={{ color: "grey", marginLeft: 10 }}>
             Already have an account?
            
@@ -38,8 +40,7 @@ const StarterScreen = ({navigation}) => {
                 Sign in
               </Text>
             </TouchableOpacity>
-        </View>
-        
+              </View>*/}
       </View>
     </View>
   );
@@ -54,12 +55,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 5,
+    backgroundColor: "#14213D",
+
   },
   text: {
     textAlign: "center",
 
-    color: "#3B3D99",
+    color: "#fff",
     fontSize: 50,
     fontWeight: "bold",
   },
@@ -72,18 +74,20 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: "center",
     alignItems: "center",
+
   },
   buttonCover: {
-    backgroundColor: "#3B3D99",
     padding: 15,
     paddingRight: 110,
     paddingLeft: 110,
     borderRadius: 5,
+    backgroundColor: "#EA9700",
+
   },
   description: {
     maxWidth: 250,
     textAlign: "center",
-    color: "grey",
-    marginTop: 10,
+    color: "#eee",
+    marginTop: 10
   },
 });

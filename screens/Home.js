@@ -77,10 +77,11 @@ const Home = () => {
         </View>
       </View>
           <View style={styles.buttons}>
-  
+  {/**Plus Button */}
         <TouchableOpacity style={[styles.button, { zIndex: 999 }]}>
                   <Ionicons name="add" size={40} color="#fff"/>
         </TouchableOpacity>
+      {/**History Details */}
       </View>
       <View style={styles.recent}>
         <Text style={styles.activity}>Transaction History</Text>
@@ -132,7 +133,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     padding: 20,
     paddingTop: 70,
-    borderRadius: 15,
+    borderRadius: 8,
   },
   header: {
     flexDirection: "row",
@@ -182,7 +183,7 @@ const styles = StyleSheet.create({
     padding: 10,
     flexDirection: "row",
     marginTop: 10,
-      borderRadius: 15,
+      borderRadius: 8,
       zIndex: -99,
       elevation: 0,
 
