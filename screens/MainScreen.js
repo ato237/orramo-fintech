@@ -8,6 +8,7 @@ import Home from "./Home";
 import Account from "./Account";
 import Cards from "./Cards";
 import Savings from "./Savings";
+import Home2 from "./Home2";
 
 const MainScreen = () => {
   const Tab = createBottomTabNavigator();
