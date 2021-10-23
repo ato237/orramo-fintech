@@ -5,8 +5,8 @@ const Savings = () => {
   return (
     <View style={styles.container}>
       <View style={styles.savings}>
-      <Text style={{fontSize:50,color:'#2E3192'}}>0</Text>
-      <Text>XAF</Text>
+        <Text style={{ fontSize: 50, color: "#2E3192" }}>0</Text>
+        <Text>XAF</Text>
       </View>
       <View></View>
     </View>
@@ -16,12 +16,13 @@ const Savings = () => {
 export default Savings;
 
 const styles = StyleSheet.create({
-  container:{
-    flex: 1
+  container: {
+    flex: 1,
+    backgroundColor: "#F1F1FB",
   },
-  savings:{
-    justifyContent:'center',
-  flexDirection:'row',marginTop:80
-  }
-
+  savings: {
+    justifyContent: "center",
+    flexDirection: "row",
+    marginTop: 80,
+  },
 });

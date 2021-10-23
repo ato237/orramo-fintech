@@ -94,22 +94,22 @@ export const transaction = [
 export const Money = [
   {
     id: 546546,
-    amount: "100,202,025",
+    amount: "1,202,025.54",
     currency: "XAF",
   },
   {
     id: 546546,
-    amount: "3,501",
+    amount: "3,501.21",
     currency: "USD",
   },
   {
     id: 546546,
-    amount: "900,601",
+    amount: "900,601.20",
     currency: "NGN",
   },
   {
     id: 546546,
-    amount: "10,105",
+    amount: "10,105.76",
     currency: "GHS",
   },
 ];

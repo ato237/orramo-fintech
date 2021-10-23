@@ -1,4 +1,4 @@
-import React, { useRef, PureComponent } from "react";
+import React, { useRef, PureComponent, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -17,92 +17,32 @@ import {
 import { Avatar } from "react-native-elements";
 import { MaterialIcons } from "react-native-vector-icons";
 import { Feather } from "react-native-vector-icons";
-
+import Carousel from "pinar";
 import { FontAwesome } from "react-native-vector-icons";
 import { Dimensions } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { transaction } from "../data/transactionData";
 import { Money } from "../data/transactionData";
-import Carousel, { getInputRangeFromIndexes } from "react-native-snap-carousel";
-
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import SlidingUpPanel from "rn-sliding-up-panel";
 
 const Home = ({ navigation }) => {
-  const RenderItem = ({ item }) => {
-    return (
-      <TouchableWithoutFeedback>
-        <View
-          style={{
-            flexDirection: "row",
-            textAlign: "center",
-          }}
-        >
-          <Text style={[styles.amount, { fontSize: 17 }]}>{item.currency}</Text>
-
-          <Text style={[styles.amount, { width: 1000 }]}>{item.amount}</Text>
-        </View>
-      </TouchableWithoutFeedback>
-    );
-  };
-
   const { width, height } = Dimensions.get("window");
-  const carouselRef = useRef(null);
+
+  const [dragRange, setDragRange] = useState({
+    top: height - 100,
+    bottom: 250,
+  });
 
   const _draggedValue = new Animated.Value(180);
 
   const ModalRef = useRef(null);
 
-  const _scrollInterpolator = (index, carouselProps) => {
-    const range = [3, 2, 1, 0, -1];
-    const inputRange = getInputRangeFromIndexes(range, index, carouselProps);
-    const outputRange = range;
-
-    return { inputRange, outputRange };
-  };
-
-  const _animatedStyles = (index, animatedValue, carouselProps) => {
-    const sizeRef = carouselProps.vertical
-      ? carouselProps.itemHeight
-      : carouselProps.itemWidth;
-    const translateProp = carouselProps.vertical ? "translateY" : "translateX";
-
-    return {
-      zIndex: carouselProps.data.length - index,
-      opacity: animatedValue.interpolate({
-        inputRange: [2, 3],
-        outputRange: [1, 0],
-      }),
-      transform: [
-        {
-          rotate: animatedValue.interpolate({
-            inputRange: [-1, 0, 1, 2, 3],
-            outputRange: ["-25deg", "0deg", "-3deg", "1.8deg", "0deg"],
-            extrapolate: "clamp",
-          }),
-        },
-        {
-          [translateProp]: animatedValue.interpolate({
-            inputRange: [-1, 0, 1, 2, 3],
-            outputRange: [
-              -sizeRef * 0.5,
-              0,
-              -sizeRef, // centered
-              -sizeRef * 2, // centered
-              -sizeRef * 3, // centered
-            ],
-            extrapolate: "clamp",
-          }),
-        },
-      ],
-    };
-  };
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor="#F1F1FB" barStyle="dark-content" />
 
       <View style={styles.header}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.openDrawer()}>
           <Avatar
             rounded
             size="medium"
@@ -111,19 +51,39 @@ const Home = ({ navigation }) => {
             }}
           />
         </TouchableOpacity>
+        <Text
+          style={{
+            fontSize: 20,
+            color: "#2E3192",
+            left: 25,
+          }}
+        >
+          Welcome Tony Bradley!
+        </Text>
         <View style={styles.divider}>
           <FontAwesome name="bell" size={30} color="#000" />
         </View>
       </View>
-      <Text
+
+      <View
         style={{
-          fontSize: 20,
-          color: "#2E3192",
+          width: "100%",
           justifyContent: "flex-start",
+          alignItems: "flex-start",
+          marginLeft: 50,
+          marginTop: 20,
         }}
       >
-        Welcome Tony Bradley!
-      </Text>
+        <Text
+          style={{
+            fontSize: 22,
+            fontWeight: "bold",
+            justifyContent: "flex-start",
+          }}
+        >
+          Account Overview
+        </Text>
+      </View>
       <View style={styles.moneyContainer}>
         <View style={styles.amountContainer}>
           <Text
@@ -139,110 +99,222 @@ const Home = ({ navigation }) => {
           </Text>
           <View style={{ justifyContent: "center" }}>
             <View style={{ flexDirection: "column" }}>
-              <View>
-                {/*<Text style={styles.amount}>XAF 100,500,000</Text>*/}
-                <Carousel
-                  ref={carouselRef}
-                  data={Money}
-                  sliderWidth={270}
-                  itemWidth={250}
-                  renderItem={RenderItem}
-                  useScrollView={true}
-                  enableSnap={true}
-                  loop={true}
-                  inactiveSlideOpacity={0.1}
-                  activeSlideAlignment="start"
-                  autoplay={true}
-                  enableMomentum={false}
-                  lockScrollWhileSnapping={true}
-                />
-              </View>
-              <Text
+              {/*<Text style={styles.amount}>XAF 100,500,000</Text>*/}
+              <Carousel
+                loop={true}
+                showsControls={false}
                 style={{
-                  fontSize: 12,
-                  color: "gray",
-                  textAlign: "center",
-                  top: 10,
+                  marginBottom:
+                    Dimensions.get("window").height <= 667 ? 45 : 45,
                 }}
               >
-                Swipe for other balance
-              </Text>
+                {Money.map((item, index) => (
+                  <View key={index}>
+                    <View style={styles.slide1}>
+                      <View>
+                        <Text style={{ fontSize: 14 }}>{item.currency}</Text>
+                      </View>
+                      <Text style={styles.text}>{item.amount}</Text>
+                    </View>
+                  </View>
+                ))}
+              </Carousel>
             </View>
           </View>
         </View>
       </View>
-
-      <View style={styles.buttons}>
-        <View>
-          {/**Top up Button */}
-          <TouchableHighlight
-            onPress={() => navigation.navigate("Topup")}
-            style={[styles.button, { zIndex: 999 }]}
-          >
-            <MaterialIcons
-              style={{ top: 4 }}
-              name="call-received"
-              size={35}
-              color="#fff"
-            />
-          </TouchableHighlight>
-          <Text
-            style={[
-              styles.buttonText,
-              {
-                right: 11,
-              },
-            ]}
-          >
-            Top-Up
-          </Text>
-        </View>
-        <View>
-          {/**Send Money Button */}
-
-          <TouchableOpacity
-            onPress={() => navigation.navigate("More")}
-            style={[styles.button, { zIndex: 999 }]}
-          >
-            <Feather style={{ top: 4 }} name="send" size={35} color="#fff" />
-          </TouchableOpacity>
-          <Text
-            style={[
-              styles.buttonText,
-              {
-                right: 15,
-              },
-            ]}
-          >
-            Withdraw
-          </Text>
-        </View>
-
-        <View>
-          {/**Semd Button */}
-
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Withdraw")}
-            style={[styles.button, { zIndex: 999 }]}
-          >
-            <Ionicons style={{ top: 4 }} name="grid" size={35} color="#fff" />
-          </TouchableOpacity>
-          <Text
-            style={[
-              styles.buttonText,
-              {
-                right: 28,
-              },
-            ]}
-          >
-            Send and More
-          </Text>
-        </View>
-
-        {/**History Details */}
+      <View
+        style={{
+          justifyContent: "flex-start",
+          alignItems: "flex-start",
+          marginRight: 270,
+          marginTop: 20,
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 22,
+            fontWeight: "bold",
+            justifyContent: "flex-start",
+          }}
+        >
+          Services
+        </Text>
       </View>
+      <Carousel showsHorizontalScrollIndicator={true} showsDots={false}>
+        <View style={styles.buttons}>
+          <View>
+            {/**Top up Button */}
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Topup")}
+              style={[styles.button, { zIndex: 999 }]}
+            >
+              <MaterialIcons
+                style={styles.iconStyle}
+                name="call-received"
+                size={35}
+                color="#000"
+              />
+            </TouchableOpacity>
+            <Text
+              style={[
+                styles.buttonText,
+                {
+                  right: 11,
+                },
+              ]}
+            >
+              Deposit
+            </Text>
+          </View>
+          <View>
+            {/**Send Money Button */}
+
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Withdraw")}
+              style={[styles.button, { zIndex: 999 }]}
+            >
+              <Feather
+                style={styles.iconStyle}
+                name="send"
+                size={35}
+                color="#000"
+              />
+            </TouchableOpacity>
+            <Text
+              style={[
+                styles.buttonText,
+                {
+                  right: 15,
+                },
+              ]}
+            >
+              Withdraw
+            </Text>
+          </View>
+
+          <View>
+            {/**Semd Button */}
+
+            <TouchableOpacity
+              onPress={() => navigation.navigate("More")}
+              style={[styles.button, { zIndex: 999 }]}
+            >
+              <Ionicons
+                style={styles.iconStyle}
+                name="people-outline"
+                size={35}
+                color="#000"
+              />
+            </TouchableOpacity>
+            <Text
+              style={[
+                styles.buttonText,
+                {
+                  right: 15,
+                },
+              ]}
+            >
+              Transfer
+            </Text>
+          </View>
+        </View>
+        <View style={[styles.buttons, { left: 18 }]}>
+          <View>
+            {/**Top up Button */}
+            <TouchableHighlight
+              onPress={() => navigation.navigate("Topup")}
+              style={[styles.button, { zIndex: 999 }]}
+            >
+              <Ionicons
+                style={styles.iconStyle}
+                name="cash-outline"
+                size={35}
+                color="#000"
+              />
+            </TouchableHighlight>
+            <Text
+              style={[
+                styles.buttonText,
+                {
+                  right: 11,
+                },
+              ]}
+            >
+              Airtime
+            </Text>
+          </View>
+          <View>
+            {/**Send Money Button */}
+
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Withdraw")}
+              style={[styles.button, { zIndex: 999 }]}
+            >
+              <MaterialIcons
+                style={styles.iconStyle}
+                name="receipt"
+                size={35}
+                color="#000"
+              />
+            </TouchableOpacity>
+            <Text
+              style={[
+                styles.buttonText,
+                {
+                  right: 15,
+                },
+              ]}
+            >
+              Pay Bills
+            </Text>
+          </View>
+
+          <View>
+            {/**Semd Button */}
+
+            <TouchableOpacity
+              onPress={() => navigation.navigate("More")}
+              style={[styles.button, { zIndex: 999 }]}
+            >
+              <FontAwesome
+                style={styles.iconStyle}
+                name="bitcoin"
+                size={35}
+                color="#000"
+              />
+            </TouchableOpacity>
+            <Text
+              style={[
+                styles.buttonText,
+                {
+                  right: 28,
+                },
+              ]}
+            >
+              Buy Crypto
+            </Text>
+          </View>
+        </View>
+      </Carousel>
+      {/**History Details */}
+
       <View style={styles.recent}>
-        <Text style={styles.activity}>Transaction History</Text>
+        <View style={{ flexDirection: "row" }}>
+          <Text style={styles.activity}>Transaction History</Text>
+          <View style={{ paddingLeft: Dimensions.get("window").width - 220 }}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("History")}
+              style={{ justifyContent: "flex-end" }}
+            >
+              <Text
+                style={[styles.activity, { textDecorationLine: "underline" }]}
+              >
+                View All
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
         <ScrollView
           showsVerticalScrollIndicator={false}
           style={{
@@ -254,7 +326,6 @@ const Home = ({ navigation }) => {
           <View
             style={{
               marginTop: 1,
-              backgroundColor: "#fff",
               borderTopRightRadius: 30,
               borderTopLeftRadius: 30,
               borderBottomRightRadius: 30,
@@ -263,59 +334,65 @@ const Home = ({ navigation }) => {
             }}
           >
             {transaction.map((data, index) => (
-              <View key={index} style={styles.history}>
-                <View style={{ flexDirection: "row" }}>
-                  <Avatar
-                    rounded
-                    size="small"
-                    source={{
-                      uri: data.image,
-                    }}
-                  />
-                  <View
-                    style={{
-                      flexDirection: "column",
-                    }}
-                  >
-                    <Text
+              <TouchableWithoutFeedback key={index}>
+                <View style={styles.history}>
+                  <View style={{ flexDirection: "row" }}>
+                    <Avatar
+                      rounded
+                      size="small"
+                      source={{
+                        uri: data.image,
+                      }}
+                    />
+                    <View
                       style={{
-                        color: "#14213D",
-                        fontSize: 15,
-                        paddingLeft: 10,
+                        flexDirection: "column",
                       }}
                     >
-                      {data.name}
+                      <Text
+                        style={{
+                          color: "#14213D",
+                          fontSize: 15,
+                          paddingLeft: 10,
+                        }}
+                      >
+                        {data.name}
+                      </Text>
+                      <Text
+                        style={{
+                          color: "#fca311",
+                          fontSize: 12,
+                          paddingLeft: 10,
+                        }}
+                      >
+                        {data.date}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.transactionList}>
+                    <Text
+                      style={{
+                        fontSize: 13,
+                        color: "gray",
+                        textAlign: "right",
+                      }}
+                    >
+                      {data.currency}
                     </Text>
                     <Text
                       style={{
-                        color: "#fca311",
-                        fontSize: 12,
-                        paddingLeft: 10,
+                        fontWeight: "bold",
+                        color: "#14213D",
+                        opacity: 0.8,
+                        fontSize: 15,
+                        textAlign: "right",
                       }}
                     >
-                      {data.date}
+                      {data.amount}
                     </Text>
                   </View>
                 </View>
-                <View style={styles.transactionList}>
-                  <Text
-                    style={{ fontSize: 13, color: "gray", textAlign: "right" }}
-                  >
-                    {data.currency}
-                  </Text>
-                  <Text
-                    style={{
-                      fontWeight: "bold",
-                      color: "#14213D",
-                      opacity: 0.8,
-                      fontSize: 15,
-                      textAlign: "right",
-                    }}
-                  >
-                    {data.amount}
-                  </Text>
-                </View>
-              </View>
+              </TouchableWithoutFeedback>
             ))}
           </View>
         </ScrollView>
@@ -346,12 +423,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   divider: {
-    paddingLeft: Dimensions.get("window").width - 130,
+    paddingLeft: Dimensions.get("window").width - 360,
   },
   activity: {
-    paddingRight: Dimensions.get("window").width - 160,
     color: "gray",
-    opacity: 0.5,
   },
   amount: {
     color: "#3B3D99",
@@ -361,23 +436,32 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   moneyContainer: {
-    flex: 1,
+    flex: Dimensions.get("window").height <= 667 ? 1.3 : 1.2,
     marginTop: 20,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    width: "92%",
+    shadowColor: "#171717",
+    shadowOffset: { width: 0, height: 1.5 },
+    shadowOpacity: 0.1,
+    shadowRadius: 1,
+    elevation: 1,
   },
   buttons: {
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
     flexDirection: "row",
     marginLeft: 30,
+    marginTop: 18,
   },
   button: {
     justifyContent: "center",
     flexDirection: "row",
     backgroundColor: "#fca311",
     padding: 12,
-    width: 70,
-    height: 70,
-    borderRadius: 40,
+    width: Dimensions.get("window").height <= 667 ? 60 : 70,
+    height: Dimensions.get("window").height <= 667 ? 60 : 70,
+    borderRadius: 18,
     marginBottom: 20,
     marginRight: 20,
     marginLeft: 20,
@@ -385,16 +469,19 @@ const styles = StyleSheet.create({
   buttonText: {
     marginLeft: 40,
     bottom: 15,
-    color: "gray",
+    color: "black",
+    opacity: 0.8,
   },
   recent: {
-    flex: 2.5,
+    flex: Dimensions.get("window").height <= 667 ? 1.3 : 2.5,
     alignContent: "center",
     alignItems: "center",
   },
   history: {
+    backgroundColor: "#fff",
     marginBottom: 5,
-    padding: 5,
+    paddingTop: 15,
+    paddingBottom: 15,
     paddingRight: 10,
     paddingLeft: 10,
     flexDirection: "row",
@@ -403,9 +490,33 @@ const styles = StyleSheet.create({
     zIndex: -99,
     elevation: 0,
     justifyContent: "space-between",
+    shadowColor: "#171717",
+    shadowOffset: { width: 0, height: 1.5 },
+    shadowOpacity: 0.1,
+    shadowRadius: 1,
+    elevation: 1,
   },
   transactionList: {
     flexDirection: "row",
   },
   transactionItems: {},
+  slide1: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  text: {
+    color: "#1E2061",
+    opacity: 0.9,
+    fontSize: 35,
+    fontWeight: "bold",
+  },
+  shadowProp: {
+    shadowColor: "#171717",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.4,
+    shadowRadius: 2,
+  },
+  iconStyle: {
+    top: Dimensions.get("window").height <= 667 ? 0 : 4,
+  },
 });

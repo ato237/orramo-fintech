@@ -1,9 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Login from "./src/screens/Login";
 import Signup from "./src/screens/Signup";
 import MainScreen from "./src/screens/MainScreen";
 import GoogleSign from "./src/screens/GoogleSign";
@@ -16,14 +14,14 @@ export default function App() {
 
   return (
     <NavigationContainer independent={true}>
-      <Stack.Navigator initialRouteName="MainScreen">
-        <Stack.Screen
+      <Stack.Navigator initialRouteName="StarterScreen">
+        {/*    <Stack.Screen
           name="Login"
           component={Login}
           options={{
             headerShown: false,
           }}
-        />
+        />*/}
         <Stack.Screen
           name="StarterScreen"
           component={StarterScreen}

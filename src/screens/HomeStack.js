@@ -7,7 +7,8 @@ import Home from "./Home";
 import TopupOptions from "./topup/TopupOptions";
 import MoreOptions from "./more/MoreOptions";
 import WithdrawOptions from "./withdraw/WithdrawOptions";
-
+import UserDrawerScreen from "./utilities/UserDrawerScreen";
+import TransactionHistory from "./utilities/TransactionHistory";
 
 const HomeStack = () => {
   const Stack = createNativeStackNavigator();
@@ -41,6 +42,13 @@ const HomeStack = () => {
           component={WithdrawOptions}
           options={{
             headerShown: true,
+          }}
+        />
+        <Stack.Screen
+          name="History"
+          component={TransactionHistory}
+          options={{
+            headerShown: false,
           }}
         />
       </Stack.Navigator>

@@ -1,15 +1,21 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
 
 const Cards = () => {
-    return (
-        <View>
-            <Text>This is the card Page</Text>
-        </View>
-    )
-}
+  return (
+    <View style={styles.container}>
+      <Text>This is the card Page</Text>
+    </View>
+  );
+};
 
-export default Cards
+export default Cards;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#F1F1FB",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});

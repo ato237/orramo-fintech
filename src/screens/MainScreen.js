@@ -4,18 +4,13 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
-import Home from "./Home";
-import Account from "./Account";
 import Cards from "./Cards";
 import Savings from "./Savings";
-import Home2 from "./Home2";
-import TopupOptions from "./topup/TopupOptions";
 import HomeStack from "./HomeStack";
+import Settings from "./Settings";
 
 const MainScreen = () => {
   const Tab = createBottomTabNavigator();
-  const Stack = createNativeStackNavigator();
 
   return (
     <NavigationContainer independent={true}>
@@ -30,8 +25,8 @@ const MainScreen = () => {
               iconName = focused ? "wallet" : "wallet-outline";
             } else if (route.name === "Cards") {
               iconName = focused ? "card" : "card-outline";
-            } else if (route.name === "Account") {
-              iconName = focused ? "person-circle" : "person-circle-outline";
+            } else if (route.name === "Settings") {
+              iconName = focused ? "settings" : "settings-outline";
             }
 
             return <Ionicons name={iconName} size={size} color={color} />;
@@ -63,14 +58,13 @@ const MainScreen = () => {
           }}
         />
         <Tab.Screen
-          name="Account"
-          component={Account}
+          name="Settings"
+          component={Settings}
           options={{
-            headerShown: true,
+            headerShown: false,
           }}
         />
       </Tab.Navigator>
-     
     </NavigationContainer>
   );
 };
