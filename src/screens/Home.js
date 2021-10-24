@@ -24,6 +24,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { transaction } from "../data/transactionData";
 import { Money } from "../data/transactionData";
 import SlidingUpPanel from "rn-sliding-up-panel";
+import { auth } from "./config";
 
 const Home = ({ navigation }) => {
   const { width, height } = Dimensions.get("window");
@@ -58,7 +59,7 @@ const Home = ({ navigation }) => {
             left: 25,
           }}
         >
-          Welcome Tony Bradley!
+          Welcome {auth.currentUser?.email}
         </Text>
         <View style={styles.divider}>
           <FontAwesome name="bell" size={30} color="#000" />

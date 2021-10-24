@@ -1,11 +1,24 @@
-import React from "react";
+import React, { useContext } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { auth } from "./config";
+import { LoginContext } from "../context/LoginContext";
 
-const Settings = () => {
+const Settings = ({ navigation }) => {
+  const { setSignout } = useContext(LoginContext);
+
+  const handleSignOut = () => {
+    auth
+      .signOut()
+      .then(() => {
+        setSignout(true);
+      })
+      .catch((error) => alert(error.message));
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.buttonWrapper}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={handleSignOut}>
           <Text style={{ color: "white", fontSize: 20 }}>Sign Out</Text>
         </TouchableOpacity>
       </View>
@@ -22,7 +35,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  buttonWrapper: {
+  buttonWrapper: {},
+  button: {
     backgroundColor: "#2E3192",
     borderRadius: 30,
     paddingHorizontal: 70,

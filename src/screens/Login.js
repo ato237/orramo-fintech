@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/core";
-import React from "react";
+import React, { useEffect } from "react";
 import {
+  ActivityIndicator,
   StatusBar,
   StyleSheet,
   Text,
@@ -14,9 +15,23 @@ import * as Animatable from "react-native-animatable";
 import { MaterialIcons } from "react-native-vector-icons";
 import { FontAwesome } from "react-native-vector-icons";
 import { Feather } from "react-native-vector-icons";
+import { auth } from "./config";
 
 const Login = ({ navigation }) => {
-        {/**The Data for the password and the email  */}
+  {
+    /**The Data for the password and the email  */
+  }
+  const [signed, setSigned] = React.useState(false);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        navigation.navigate("MainScreen");
+      }
+    });
+
+    return unsubscribe;
+  }, []);
 
   const [data, setData] = React.useState({
     email: "",
@@ -55,12 +70,27 @@ const Login = ({ navigation }) => {
     });
   };
 
+  const handleLogin = () => {
+    setSigned(true);
+    auth
+      .signInWithEmailAndPassword(data.email, data.password)
+      .then((userCredentials) => {
+        const user = userCredentials.user;
+        console.log("logged in with", user.email);
+        setSigned(false);
+      })
+      .catch((error) => {
+        alert("Password or email error");
+        setSigned(false);
+      });
+  };
+
   navigation = useNavigation();
   return (
     <>
       {/**The login View */}
       <View style={styles.container}>
-        <StatusBar backgroundColor="#3B3D99" barStyle="light-content" />
+        <StatusBar backgroundColor="#14213D" barStyle="light-content" />
 
         <View style={styles.header}>
           <Text style={styles.text_header}>Login</Text>
@@ -68,12 +98,13 @@ const Login = ({ navigation }) => {
         <Animatable.View animation="fadeInUpBig" style={styles.footer}>
           <Text style={styles.text_footer}>Email</Text>
           <View style={styles.action}>
-            <FontAwesome name="user-o" color="#3B3D99" size={20} />
+            <FontAwesome name="user-o" color="#FFA500" size={20} />
             <TextInput
               placeholder="Enter email"
               style={styles.textInput}
               autoCapitalize="none"
               onChangeText={(val) => textInputChange(val)}
+              placeholderTextColor="#5C667B"
             />
             {data.check_textInputChange ? (
               <Animatable.View animation="bounceIn">
@@ -84,13 +115,14 @@ const Login = ({ navigation }) => {
           <Text style={[styles.text_footer, { marginTop: 35 }]}>Password</Text>
 
           <View style={styles.action}>
-            <FontAwesome name="lock" color="#3B3D99" size={20} />
+            <FontAwesome name="lock" color="#FFA500" size={20} />
             <TextInput
               placeholder="Enter Password"
               style={styles.textInput}
               secureTextEntry={data.secureTextEntry ? true : false}
               autoCapitalize="none"
               onChangeText={(val) => handlePasswordChange(val)}
+              placeholderTextColor="#5C667B"
             />
             <TouchableOpacity onPress={updateSecurityTextEntry}>
               {data.secureTextEntry ? (
@@ -100,46 +132,43 @@ const Login = ({ navigation }) => {
               )}
             </TouchableOpacity>
           </View>
-                  {/**Sign Up button */}
-
+          {/**Sign Up button */}
           <View style={styles.button}>
             <TouchableOpacity
-              onPress={() => navigation.navigate("MainScreen")}
+              onPress={handleLogin}
               style={[
                 styles.signIn,
                 {
                   flexDirection: "row",
-                  backgroundColor: "#CF3F37",
+                  backgroundColor: "#14213D",
                   marginTop: 0,
                 },
               ]}
             >
               <LinearGradient
-                colors={["#3B3D99", "#3B3D99"]}
+                colors={["#FFA500", "#FFA500"]}
                 style={styles.signIn}
               >
-                <Text style={[styles.textSign, { color: "#fff" }]}>
-                  Sign In
+                <Text style={[styles.textSign, { color: "#000" }]}>
+                  {signed ? (
+                    <ActivityIndicator size="large" color="#fff" />
+                  ) : (
+                    "Sign In"
+                  )}
                 </Text>
               </LinearGradient>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("Signup")}
-              style={[
-                styles.signIn,
-                {
-                  borderColor: "#3B3D99",
-                  borderWidth: 1,
-                  marginTop: 15,
-                },
-              ]}
-            >
-              <Text style={[styles.textSign, { color: "#3B3D99" }]}>
-                Sign Up
-              </Text>
-            </TouchableOpacity>
+
+            <View style={{ flexDirection: "row", marginTop: 10 }}>
+              <Text style={{ color: "#fff" }}>Don't yet have an account?</Text>
+              <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
+                <Text style={{ color: "#FFA500", paddingHorizontal: 5 }}>
+                  Sign Up
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-                  {/**Sign in With google button  */}
+          {/**Sign in With google button 
 
           <View style={styles.buttonG}>
             <Text> Or </Text>
@@ -174,6 +203,7 @@ const Login = ({ navigation }) => {
               </LinearGradient>
             </TouchableOpacity>
           </View>
+           */}
         </Animatable.View>
       </View>
     </>
@@ -183,74 +213,74 @@ const Login = ({ navigation }) => {
 export default Login;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#fff",
-      },
-      header: {
-        flex: 1,
-        justifyContent: "flex-end",
-        alignItems: "center",
-        paddingBottom: 10,
-      },
-      footer: {
-        flex: 5,
-        backgroundColor: "#fff",
-        borderTopLeftRadius: 0,
-        borderTopRightRadius: 0,
-        paddingHorizontal: 20,
-        paddingVertical: 30,
-      },
-      text_header: {
-        color: "#3B3D99",
-        fontWeight: "bold",
-        fontSize: 42,
-      },
-      text_footer: {
-        color: "#000",
-        fontSize: 18,
-      },
-      action: {
-        flexDirection: "row",
-        marginTop: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: "#f2f2f2",
-        paddingBottom: 5,
-      },
-      actionError: {
-        flexDirection: "row",
-        marginTop: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: "#FF0000",
-        paddingBottom: 5,
-      },
-      textInput: {
-        flex: 1,
-        marginTop: Platform.OS === "ios" ? 0 : -12,
-        paddingLeft: 10,
-        color: "#05375a",
-      },
-      errorMsg: {
-        color: "#FF0000",
-        fontSize: 14,
-      },
-      button: {
-        alignItems: "center",
-        marginTop: 50,
-      },
-      buttonG: {
-        alignItems: "center",
-        marginTop: 20,
-      },
-      signIn: {
-        width: "100%",
-        height: 50,
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 10,
-      },
-      textSign: {
-        fontSize: 18,
-        fontWeight: "bold",
-      },
+  container: {
+    flex: 1,
+    backgroundColor: "#14213D",
+  },
+  header: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "center",
+    paddingBottom: 10,
+  },
+  footer: {
+    flex: 5,
+    backgroundColor: "#14213D",
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+  },
+  text_header: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 42,
+  },
+  text_footer: {
+    color: "#EBD968",
+    fontSize: 18,
+  },
+  action: {
+    flexDirection: "row",
+    marginTop: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f2f2f2",
+    paddingBottom: 5,
+  },
+  actionError: {
+    flexDirection: "row",
+    marginTop: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#FF0000",
+    paddingBottom: 5,
+  },
+  textInput: {
+    flex: 1,
+    marginTop: Platform.OS === "ios" ? 0 : -12,
+    paddingLeft: 10,
+    color: "#fff",
+  },
+  errorMsg: {
+    color: "#FF0000",
+    fontSize: 14,
+  },
+  button: {
+    alignItems: "center",
+    marginTop: 50,
+  },
+  buttonG: {
+    alignItems: "center",
+    marginTop: 20,
+  },
+  signIn: {
+    width: "100%",
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+  },
+  textSign: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
 });

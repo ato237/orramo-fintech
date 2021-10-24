@@ -23,10 +23,7 @@ const GoogleSign = ({ navigation }) => {
       </SafeAreaView>
 
       <Animatable.View animation="fadeInUpBig" style={styles.button}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("MainScreen")}
-          style={styles.envelop}
-        >
+        <TouchableOpacity onPress={() => promptAsync()} style={styles.envelop}>
           <FontAwesome
             style={{ paddingRight: 40, top: 0, fontSize: 20 }}
             name="google-plus"

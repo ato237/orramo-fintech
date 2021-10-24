@@ -19,9 +19,11 @@ const StarterScreen = ({ navigation }) => {
       <View style={styles.button}>
         <TouchableOpacity
           style={styles.buttonCover}
-          onPress={() => navigation.navigate("GoolgeSign")}
+          onPress={() => navigation.navigate("Signup")}
         >
-          <Text style={{ fontSize: 18,fontWeight:'bold', color: "#000" }}>Get Started!</Text>
+          <Text style={{ fontSize: 18, fontWeight: "bold", color: "#000" }}>
+            Get Started!
+          </Text>
         </TouchableOpacity>
         {/*<View style={{flex:1, flexDirection:'row',marginTop:15}}>
           <Text style={{ color: "grey", marginLeft: 10 }}>
@@ -56,7 +58,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#14213D",
-
   },
   text: {
     textAlign: "center",
@@ -74,7 +75,6 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: "center",
     alignItems: "center",
-
   },
   buttonCover: {
     padding: 15,
@@ -82,12 +82,11 @@ const styles = StyleSheet.create({
     paddingLeft: 110,
     borderRadius: 5,
     backgroundColor: "#EA9700",
-
   },
   description: {
     maxWidth: 250,
     textAlign: "center",
     color: "#eee",
-    marginTop: 10
+    marginTop: 10,
   },
 });
