@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
@@ -85,7 +86,10 @@ const SignUp = ({ navigation }) => {
           console.log(user.email);
           setSigned(false);
         })
-        .catch((error) => alert(error.message));
+        .catch((error) => {
+          alert(error.message);
+          setSigned(false);
+        });
     }
   };
 
@@ -180,7 +184,7 @@ const SignUp = ({ navigation }) => {
                   {signed ? (
                     <ActivityIndicator size="large" color="#fff" />
                   ) : (
-                    "Sign In"
+                    "Sign Up"
                   )}
                 </Text>
               </LinearGradient>

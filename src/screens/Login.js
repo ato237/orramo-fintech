@@ -24,13 +24,13 @@ const Login = ({ navigation }) => {
   const [signed, setSigned] = React.useState(false);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    auth.onAuthStateChanged((user) => {
       if (user) {
         navigation.navigate("MainScreen");
+      } else {
+        navigation.navigate("Login");
       }
     });
-
-    return unsubscribe;
   }, []);
 
   const [data, setData] = React.useState({
@@ -80,7 +80,7 @@ const Login = ({ navigation }) => {
         setSigned(false);
       })
       .catch((error) => {
-        alert("Password or email error");
+        alert(error.message);
         setSigned(false);
       });
   };
